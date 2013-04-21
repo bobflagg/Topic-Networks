@@ -53,9 +53,11 @@
 \nocite{Sh:1}
 \nocite{small} 
 
-\title[Summarizing Documents with Topic Networks]{%
-       Summarizing Documents with Topic Networks \\ \date{}  }
-\author[Bob Flagg]{Bob Flagg}
+\title[Topic Networks]{
+       Topic Networks \\
+       {\Large A mini project for Social Network Analysis}
+}
+%\author[Bob Flagg]{Bob Flagg}
 
 %\firstpage{}
 
@@ -83,7 +85,7 @@ This topic model naturally defines a \href{http://en.wikipedia.org/wiki/Bipartit
 between documents and the topics that appear in 
 them.  The bipartite graph is converted into a network of topics by linking
 topics if they appear in the same document.  By analyzing a simple sample corpus, we explore 
-properties of this {\em topic network} in hopes that they will
+properties of these {\em topic networks} in hopes that they will
 provide insights useful in summarizing the
 underlying document collection.
 
@@ -99,7 +101,7 @@ are reproduced below and in an R source file available on
 borrowed a lot of ideas from Solomon Messing's blog post\cite{messing} on 
 working with bipartitie/affiliation networks in {\bf R}.
 
-\subsection{Build the Document-Term Matrix}
+\subsection{The Document-Term Matrix}
 
 \PARstart If the path to the directory containing the texts of Obama speeches is in
 the variable {\tt corpus.source}, then we can build the corpus and document-term matrix
@@ -127,7 +129,7 @@ corpus.dtm <- DocumentTermMatrix(
 )
 \end{verbatim}
 
-\subsection{Visualize Frequent Words}
+\subsection{Frequent Words}
 
 \PARstart To gain some preliminary insight into this corpus, we'll 
 look at a bar chart of most frequent words and a word cloud.
@@ -187,7 +189,7 @@ dev.off()
 \label{fig:wordcloud}
 \end{figure}
 
-\subsection{Build the Topic Model}
+\subsection{The Topic Model}
 
 \PARstart Before building a topic model, we want to filter out ``unimportant'' words from
 the corpus. For this we will use the tf-idf matrix.
@@ -226,7 +228,7 @@ dt.df <- dt.df[order(dt.df$document),]
 \end{verbatim}
 
 
-\subsection{Build the Document-Topic Network}
+\subsection{The Document-Topic Network}
 \PARstart The first network we'll consider has two modes: documents and topics. 
 The {\tt igraph} package allows us to construct a network from an incidence 
 matrix as follows.
@@ -266,15 +268,18 @@ document nodes.
 n.docs <- nrow(dt.matrix)
 n.topics <- ncol(dt.matrix)
 n.vertices <- n.docs + n.topics
-V(dt.network)$color[1:n.docs] <- rgb(1,0,0,.4)
-V(dt.network)$color[(n.docs+1):n.vertices] <- rgb(0,1,0,.5)
+V(dt.network)$color[1:n.docs] <- 
+  rgb(1,0,0,.4)
+V(dt.network)$color[(n.docs+1):n.vertices] <- 
+  rgb(0,1,0,.5)
 V(dt.network)$label <- NA
 V(dt.network)$size[1:n.docs] <- 2
 V(dt.network)$size[(n.docs+1):n.vertices] <- 6
 E(dt.network)$width <- .5
 E(dt.network)$color <- rgb(.5,.5,0,.4)
 pdf("dtn.pdf")
-plot(dt.network, layout=layout.fruchterman.reingold)
+plot(dt.network, 
+  layout=layout.fruchterman.reingold)
 dev.off()
 \end{verbatim}
 
@@ -287,17 +292,17 @@ dev.off()
 \end{figure}
 
 
-\subsection{Build the Topic Network}
+\subsection{The Topic Network}
 
 \PARstart The topic network is the one of most interest to us.  To build it
-we create its adjancy matrix by multiplying the transpose of the document-topic
+we create its adjacency matrix by multiplying the transpose of the document-topic
 matrix with itself.
 
 \begin{verbatim}
 # Create the topic network:
 topic.network.matrix <- t(dt.matrix) %*% dt.matrix
-topic.network <- graph.adjacency(topic.network.matrix, 
-  mode = "undirected")
+topic.network <- graph.adjacency(
+  topic.network.matrix, mode = "undirected")
 \end{verbatim}
 
 Figure \ref{fig:topic-network}, which was created with the code below, shows the 
@@ -334,11 +339,11 @@ dev.off()
 
 
 
-\subsection{Build the Overlap Network}
+\subsection{The Overlap Network}
 
 \PARstart Another interesting view of this data takes into account the 
 percent overlap between topics, which gives rise to a directed network.
-To create this graph, we divid each row by the diagonal to get the
+To create this graph, we divide each row by the diagonal to get the
 adjacency matrix.
 
 \begin{verbatim}
@@ -370,7 +375,7 @@ overlap.network$layout <- tkplot.getcoords(1)
 
 
 The final step to display this network in a way to make the
-important properties visable requires a manual set.  We'll use the
+important properties visable requires some manual work.  We'll use the
 tkplot gui tool to help us layout nodes so that labels are clearly
 visible. Once we're done arranging nodes, the layout can be saved
 using {\tt tkplot.getcoords(1)}:
