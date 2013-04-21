@@ -15,6 +15,12 @@
 ##    topicmodels                                                             ##
 ##    wordcloud                                                               ##
 ##                                                                            ##
+## Much of the analysis below is based on ideas from Solomon Messing's blog   ##  
+## post                                                                       ##
+##    Working with Bipartite/Affiliation Network Data in R                    ##
+## at                                                                         ##
+##    http://solomonmessing.wordpress.com/2012/09/30/                         ##
+##                                                                            ##
 ################################################################################
 # Set the path to the corpus directory.                                        #
 # ---------------------------------------------------------------------------- #
