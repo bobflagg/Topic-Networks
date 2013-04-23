@@ -25,6 +25,7 @@
 # Set the path to the corpus directory.                                        #
 # ---------------------------------------------------------------------------- #
 corpus.directory <- '/home/birksworks/Projects/topic-networks/corpus'
+setwd('/home/birksworks/Projects/topic-networks/Topic-Networks/doc/')
 # ---------------------------------------------------------------------------- #
 # Load required libraries.                                                     #
 # ---------------------------------------------------------------------------- #
@@ -125,8 +126,12 @@ V(dt.network)$size[1:n.docs] <- 2
 V(dt.network)$size[(n.docs+1):n.vertices] <- 6
 E(dt.network)$width <- .5
 E(dt.network)$color <- rgb(.5,.5,0,.4)
+tkplot(dt.network)
+dt.network$layout <- tkplot.getcoords(1)
+
 pdf("dtn.pdf")
 plot(dt.network, layout=layout.fruchterman.reingold)
+plot(dt.network)
 dev.off()
 png("dtn.png")
 plot(dt.network, layout=layout.fruchterman.reingold)
@@ -149,6 +154,9 @@ V(topic.network)$color <- rgb(0,1,0,.6)
 # Set edge gamma according to edge weight
 egam <- (log(E(topic.network)$weight)+.3)/max(log(E(topic.network)$weight)+.3)
 E(topic.network)$color <- rgb(.5,.5,0,egam)
+tkplot(topic.network)
+topic.network$layout <- tkplot.getcoords(2)
+
 pdf("topic-network.pdf")
 plot(topic.network, layout=layout.kamada.kawai)
 dev.off()
@@ -175,7 +183,7 @@ overlap.network <- simplify(overlap.network, remove.multiple=FALSE, remove.loops
 overlap.network$layout <- layout.kamada.kawai(overlap.network)
 V(overlap.network)$label <- topic.labels
 tkplot(overlap.network)
-overlap.network$layout <- tkplot.getcoords(1)
+overlap.network$layout <- tkplot.getcoords(3)
 
 # Set vertex attributes
 V(overlap.network)$label.color <- rgb(0,0,.2,.6)

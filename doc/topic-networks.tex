@@ -55,7 +55,8 @@
 
 \title[Topic Networks]{
        Topic Networks \\
-       {\Large A mini project for Social Network Analysis}
+       {\Large A mini project for Social Network Analysis} \\
+       {\large Final Version}
 }
 %\author[Bob Flagg]{Bob Flagg}
 
@@ -300,7 +301,8 @@ matrix with itself.
 
 \begin{verbatim}
 # Create the topic network:
-topic.network.matrix <- t(dt.matrix) %*% dt.matrix
+topic.network.matrix <- t(dt.matrix) %*% 
+  dt.matrix
 topic.network <- graph.adjacency(
   topic.network.matrix, mode = "undirected")
 \end{verbatim}
@@ -337,6 +339,39 @@ dev.off()
 \label{fig:topic-network}
 \end{figure}
 
+As Figure~\ref{fig:topic-network} shows, the topic network is very busy, suggesting
+that we've not done a good job choosing the most import topics for each document.
+In fact, as the code below shows, the average degree, at $19.3$, is very high.
+
+\begin{verbatim}
+# Compute the average degree of our network:
+degrees <- V(topic.network)$degree
+topic.network.average.degree <- sum(degrees) / 
+  length(V(topic.network))
+\end{verbatim}
+
+\noindent This problem can probably be fixed if rather than taking the top 4 topics for each
+document in the document-topic network, we were to choose only those topics whose
+probability of appearing in the document is above a certain threshold.  We plan to 
+investigate that approach but don't have time to pursue it here.
+
+Once we've solved the previous problem, we plan to systematically investigate the connections between important
+properties of the topic network and the underlying corpus.  As an example, consider
+centrality:
+
+\begin{verbatim}
+# Betweenness centrality
+V(topic.network)$btwcnt <- betweenness(topic.network)
+V(topic.network)$label[order(V(topic.network)$btwcnt)]
+\end{verbatim}
+
+\noindent This measure suggests that the most central topics in the corpus are
+\begin{itemize}
+ \item tonight, mccain, page
+ \item religion, bankruptcy, christian
+ \item oil, fuel, auto
+ \item iraq, iraqi, troop
+\end{itemize}
 
 
 \subsection{The Overlap Network}
